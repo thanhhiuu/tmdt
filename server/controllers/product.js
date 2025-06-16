@@ -62,7 +62,7 @@ const getAllProduct = asyncHandler(async (req, res) => {
 });
 const getProduct = asyncHandler(async (req, res) => {
   const queryObj = { ...req.query }; // Tạo ra Obj mới chứ tất cả tham số query
-  console.log(queryObj);
+  // console.log(queryObj);
   // Filtering
   const removeFields = ['limit', 'page', 'sort'];
   removeFields.forEach((elm) => delete queryObj[elm]); // Loại bỏ các trường trong query
@@ -75,12 +75,12 @@ const getProduct = asyncHandler(async (req, res) => {
     /\b(gt|gte|lt|lte)\b/g,
     (match) => `$${match}`
   );
-  console.log('1', queryString);
+  // console.log('1', queryString);
   // Tìm kiếm theo biểu thức chuyển đổi ( Giup mongoose đọc hiểu)
   const formatFiler = JSON.parse(queryString); // Chuyển query trở lại lúc đầu (  { price: { '$gt': '5000' } } )
-  console.log('2', formatFiler);
+  // console.log('2', formatFiler);
 
-  console.log(formatFiler.title);
+  // console.log(formatFiler.title);
   if (queryObj?.title) {
     formatFiler.title = { $regex: queryObj.title, $options: 'i' }; // Sử dụng các phương thức của mongoose để tìm kiếm ( $regex) và không phân biệt hoa thường ( $options: "i")
   }
@@ -91,7 +91,7 @@ const getProduct = asyncHandler(async (req, res) => {
   if (req?.query?.sort) {
     // Ví dụ {{base_url}}product/get?sort=price, stock thì đoạn code sau sẽ chuyển đổi thành {{base_url}}product/get?sort=price stock
     const filter = req.query.sort.split(',').join(' '); // Loại bỏ đấu "," thành dấu " " vì trong mongoose không dùng dấu phẩy
-    console.log('hihi', filter);
+    // console.log('hihi', filter);
     resultFilter = resultFilter.sort(filter); // Lưu giá trị của resultFilter nếu thỏa điều kiện
   } else {
     // Nếu không mặc định xếp giảm dần theo thời gian tạo
@@ -195,7 +195,7 @@ const ratings = asyncHandler(async (req, res) => {
   const totalRatings =
     products.rating.reduce((sum, elm) => sum + +elm.star, 0) /
     products.rating.length;
-  console.log('totals', products.rating.length);
+
   products.newReview = parseFloat(totalRatings.toFixed(1));
   await products.save();
   res.status(200).json({

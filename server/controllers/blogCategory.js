@@ -13,7 +13,7 @@ const getCurrent = asyncHandler(async (req, res) => {
   const { blid } = req.params;
 
   const response = await blogCategory.findById(blid);
-  console.log(response);
+
   return res.status(200).json({
     success: response ? true : false,
     message: response ? response : 'Cannot getCurrent',
@@ -21,7 +21,7 @@ const getCurrent = asyncHandler(async (req, res) => {
 });
 const getAll = asyncHandler(async (req, res) => {
   const response = await blogCategory.find({});
-  console.log(response);
+
   return res.status(200).json({
     success: response ? true : false,
     message: response ? response : 'Cannot getCurrent',
@@ -33,7 +33,7 @@ const update = asyncHandler(async (req, res) => {
   const response = await blogCategory.findByIdAndUpdate(blid, data, {
     new: true,
   });
-  console.log(response);
+
   return res.status(200).json({
     success: response ? true : false,
     message: response ? response : 'Cannot getCurrent',

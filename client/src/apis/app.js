@@ -1,8 +1,18 @@
 import instance from '../axios';
 
-const apiGetCategories = () =>
+export const apiGetCategories = () =>
   instance({
     url: '/product-category/all',
     method: 'get',
   });
-export default apiGetCategories;
+export const apiProduct = () =>
+  instance({
+    url: '/product/getall',
+    method: 'get',
+  });
+export const apiSort = (params) =>
+  instance({
+    url: `/product/get`,
+    method: 'get',
+    params: params,
+  });
