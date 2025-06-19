@@ -4,3 +4,7 @@ export { default as Slider } from './Slider';
 export { default as Banner } from './Banner';
 export { default as Bestsaller } from './Bestsaller';
 export { default as Dailydeal } from './Dailydeal';
+export { default as SelectOption } from './SelectOption';
+export { default as Countdown } from './Countdown';
+export { default as ItemProduct } from './ItemProduct';
+export { default as FeaturedProducts } from './FeaturedProducts';

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as apis from '../apis';
 import { useKeenSlider } from 'keen-slider/react';
 import 'keen-slider/keen-slider.min.css';
@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'; // <-- ICON
 import { formatNumber, startRating } from '../ultils/helpers';
 import best from '../assets/best.png';
 import newz from '../assets/new.png';
-import SelectOption from './SelectOption';
+import { SelectOption } from './';
 import icons from '../ultils/icons';
 const Bestsaller = () => {
   const bestsaller = [
@@ -50,11 +50,13 @@ const Bestsaller = () => {
   });
 
   useEffect(() => {
-    fetchProduct();
+    setTimeout(() => {
+      fetchProduct();
+    }, 1000);
   }, [active]);
 
   return (
-    <div className="p-3">
+    <div className="">
       {/* Tabs */}
       <div className="pb-2 mb-3 border-b-2">
         {bestsaller.map((elm) => (
@@ -77,7 +79,7 @@ const Bestsaller = () => {
         {/* Slider */}
         {active === 1 ? (
           <div
-            key={active}
+            key={bestsallers?.length}
             ref={sliderRef}
             className="keen-slider w-full flex items-center ml-1"
           >
@@ -117,10 +119,15 @@ const Bestsaller = () => {
                   />
                 </div>
                 <div className="flex flex-col w-full p-3 items-start justify-start">
-                  <span className="text-main">
+                  <span className="text-main ">
                     {item.title.length > 50
                       ? item.title.slice(1, 50) + '...'
                       : item.title}
+                  </span>
+                  <span>
+                    {item.newReview
+                      ? startRating(item?.newReview)
+                      : startRating(5)}
                   </span>
                   <span className="text-main">
                     {formatNumber(item.price)}
@@ -176,7 +183,11 @@ const Bestsaller = () => {
                       ? item.title.slice(1, 50) + '...'
                       : item.title}
                   </span>
-                  <span>{startRating(item.newReview)}</span>
+                  <span>
+                    {item.newReview
+                      ? startRating(item?.newReview)
+                      : startRating(5)}
+                  </span>
                   <span className="text-main">
                     {formatNumber(item.price)}
                     <strong> VNĐ</strong>
