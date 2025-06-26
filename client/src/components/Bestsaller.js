@@ -2,13 +2,20 @@ import React, { useEffect, useState } from 'react';
 import * as apis from '../apis';
 import { useKeenSlider } from 'keen-slider/react';
 import 'keen-slider/keen-slider.min.css';
+import { getProduct } from '../app/products/productAction';
+
 import { ChevronLeft, ChevronRight } from 'lucide-react'; // <-- ICON
 import { formatNumber, startRating } from '../ultils/helpers';
 import best from '../assets/best.png';
 import newz from '../assets/new.png';
 import { SelectOption } from './';
 import icons from '../ultils/icons';
+import { useDispatch } from 'react-redux';
 const Bestsaller = () => {
+  const dipatch = useDispatch();
+  useEffect(() => {
+    dipatch(getProduct());
+  }, []);
   const bestsaller = [
     { id: 1, title: 'BEST SALLER' },
     { id: 2, title: 'NEW ARRIVALS' },
@@ -50,9 +57,7 @@ const Bestsaller = () => {
   });
 
   useEffect(() => {
-    setTimeout(() => {
-      fetchProduct();
-    }, 1000);
+    fetchProduct();
   }, [active]);
 
   return (

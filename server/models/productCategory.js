@@ -9,6 +9,11 @@ var productCategorySchema = new mongoose.Schema(
       unique: true,
       index: true,
     },
+    brand: {
+      type: Array,
+      require: true,
+    },
+    image: { type: String, require: true },
     slug: {
       type: String,
     },
@@ -17,4 +22,4 @@ var productCategorySchema = new mongoose.Schema(
 );
 
 //Export the model
-export default mongoose.model('Category', productCategorySchema);
+export default mongoose.model('ProductCategory', productCategorySchema);

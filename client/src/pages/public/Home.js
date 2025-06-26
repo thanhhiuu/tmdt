@@ -6,6 +6,9 @@ import {
   Bestsaller,
   Dailydeal,
   FeaturedProducts,
+  NewArrivals,
+  Hotcollections,
+  Blogs,
 } from '../../components';
 
 const Home = () => {
@@ -53,6 +56,15 @@ const Home = () => {
       </div>
       <div className=" py-5">
         <FeaturedProducts />
+      </div>
+      <div className="py-5 h-full ">
+        <NewArrivals />
+      </div>
+      <div className="py-5">
+        <Hotcollections />
+      </div>
+      <div className="pt-5">
+        <Blogs />
       </div>
     </>
   );

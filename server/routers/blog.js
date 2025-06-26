@@ -13,7 +13,7 @@ import uploadIcloud from '../middlewares/uploadCloud.js';
 const router = Express.Router();
 
 router.post('/create', [verifyToken, isAdmin], create);
-router.get('/getall', [verifyToken, isAdmin], getAll);
+router.get('/getall', getAll);
 router.get('/current/:bid', [verifyToken, isAdmin], getBlog);
 router.put('/update/:bid', [verifyToken, isAdmin], update);
 router.delete('/delete', [verifyToken, isAdmin], deletes);

@@ -8,3 +8,7 @@ export { default as SelectOption } from './SelectOption';
 export { default as Countdown } from './Countdown';
 export { default as ItemProduct } from './ItemProduct';
 export { default as FeaturedProducts } from './FeaturedProducts';
+export { default as CustomProduct } from './CustomProduct';
+export { default as NewArrivals } from './NewArrivals';
+export { default as Hotcollections } from './Hotcollections';
+export { default as Blogs } from './Blogs';

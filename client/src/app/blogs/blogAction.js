@@ -1,13 +1,13 @@
 // eslint-disable-next-line
 import { createAsyncThunk } from '@reduxjs/toolkit';
 // eslint-disable-next-line no-unused-vars
-import * as apis from '../apis';
+import * as apis from '../../apis';
 
-export const getCategories = createAsyncThunk(
-  'app/categories',
+export const getBlogs = createAsyncThunk(
+  'blog/blog-categories',
   async (data, { rejectWithValue }) => {
-    const reponse = await apis.apiGetCategories();
-
+    const reponse = await apis.apiBlog();
+    console.log('kokok', reponse);
     if (!reponse.success) return rejectWithValue(reponse);
     return reponse.message;
   }

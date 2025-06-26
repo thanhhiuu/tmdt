@@ -16,3 +16,9 @@ export const apiSort = (params) =>
     method: 'get',
     params: params,
   });
+export const apiBlog = (params) =>
+  instance({
+    url: `/blog/getall`,
+    method: 'get',
+    params: params,
+  });
