@@ -1,7 +1,9 @@
 import React from 'react';
 import { formatNumber } from '../ultils/helpers';
+import { Link } from 'react-router-dom';
+import path from '../ultils/path';
 
-const ItemProduct = ({ title, image, price }) => {
+const ItemProduct = ({ title, image, price, _id }) => {
   return (
     <>
       <div className="w-[350px] h-[120px] border flex justify-around items-center gap-2">
@@ -14,7 +16,9 @@ const ItemProduct = ({ title, image, price }) => {
         </div>
         <div className="title flex flex-col ">
           <span className="text-main hover:text-colorNav cursor-pointer">
-            {title?.length > 20 ? title.slice(0, 15) + '...' : title}
+            <Link to={`/${path.PRODUCT}/${_id}/${title}`}>
+              {title?.length > 20 ? title.slice(0, 15) + '...' : title}
+            </Link>
           </span>
           <span className="text-main">
             {formatNumber(price)}

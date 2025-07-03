@@ -7,7 +7,7 @@ export const getProduct = createAsyncThunk(
   'product/product-categories',
   async (data, { rejectWithValue }) => {
     const reponse = await apis.apiProduct();
-    console.log('hi', reponse);
+    // console.log('hi', reponse);
     if (!reponse.success) return rejectWithValue(reponse);
     return reponse.message;
   }

@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 // Declare the Schema of the Mongo model
-const user = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     firstname: {
       type: String,
@@ -16,6 +16,11 @@ const user = new mongoose.Schema(
       required: true,
       unique: true,
       index: true,
+    },
+    mobile: {
+      type: String,
+      required: true,
+      unique: true,
     },
     email: {
       type: String,
@@ -36,7 +41,7 @@ const user = new mongoose.Schema(
     role: {
       type: String,
       required: true,
-      default: 'user',
+      default: 'Schema',
     },
     cart: [
       {
@@ -67,6 +72,10 @@ const user = new mongoose.Schema(
     resetToken: {
       type: String,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
     passwordChangeAt: {
       type: String,
     },
@@ -79,7 +88,7 @@ const user = new mongoose.Schema(
   },
   { timestamps: true }
 );
-user.pre('save', async function (next) {
+userSchema.pre('save', async function (next) {
   const user = this;
   if (!user.isModified('password')) {
     return next();
@@ -92,25 +101,26 @@ user.pre('save', async function (next) {
     return next(error);
   }
 });
-user.methods.comparePassword = async function (password) {
+userSchema.methods.comparePassword = async function (password) {
   try {
     return await bcrypt.compare(password, this.password);
   } catch (error) {
     throw new Error(error);
   }
 };
-user.methods.generateAccessToken = async function (id, role) {
+userSchema.methods.generateAccessToken = async function (id, role) {
   return await jwt.sign({ id: this._id, role }, process.env.COOKIE_SECRET, {
     expiresIn: '2d',
   });
 };
-user.methods.generateRefreshToken = async function (id) {
+userSchema.methods.generateRefreshToken = async function (id) {
   return await jwt.sign({ id: this._id }, process.env.COOKIE_SECRET, {
     expiresIn: '7d',
   });
 };
-user.methods.generateResetPassword = async function () {
+userSchema.methods.generateResetPassword = async function () {
   return await crypto.randomBytes(32).toString('hex');
 };
+
 //Export the model
-export default mongoose.model('User', user);
+export default mongoose.model('User', userSchema);

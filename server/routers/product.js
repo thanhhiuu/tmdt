@@ -19,7 +19,7 @@ const router = expressRouter.Router();
 router.post('/create', [verifyToken, isAdmin], createProduct);
 router.get('/getall', getAllProduct);
 router.get('/get', getProduct);
-router.get('/getcurrent/:uid', [verifyToken], getOneProduct);
+router.get('/getcurrent/:id', getOneProduct); // Thiếu [verifyToken]
 router.put('/update/:uid', [verifyToken], updateProduct);
 router.delete('/delete/:uid', [verifyToken, isAdmin], deleteProduct);
 router.post('/rating/:uid', [verifyToken], ratings);

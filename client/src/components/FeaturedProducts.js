@@ -9,7 +9,7 @@ const FeaturedProducts = () => {
       setData(reponse.data);
     }
   };
-  console.log(data);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -23,6 +23,7 @@ const FeaturedProducts = () => {
         {data?.map((elm) => (
           <div className="" key={elm._id}>
             <ItemProduct
+              _id={elm._id}
               title={elm.title}
               image={elm.image}
               price={elm.price}

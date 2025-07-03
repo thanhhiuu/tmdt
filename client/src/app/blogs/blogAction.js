@@ -7,7 +7,7 @@ export const getBlogs = createAsyncThunk(
   'blog/blog-categories',
   async (data, { rejectWithValue }) => {
     const reponse = await apis.apiBlog();
-    console.log('kokok', reponse);
+    // console.log('kokok', reponse);
     if (!reponse.success) return rejectWithValue(reponse);
     return reponse.message;
   }

@@ -1,5 +1,3 @@
-import icons from './icons';
-
 export const formatNumber = (number) =>
   Number(number.toFixed(1)).toLocaleString();
 

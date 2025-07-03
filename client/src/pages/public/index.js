@@ -8,3 +8,4 @@ export { default as Services } from './Services';
 export { default as Faq } from './Faq';
 export { default as HeaderTop } from './HeaderTop';
 export { default as Foodter } from './Foodter';
+export { default as FinalRegister } from './FinalRegister';

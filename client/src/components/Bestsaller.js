@@ -11,6 +11,8 @@ import newz from '../assets/new.png';
 import { SelectOption } from './';
 import icons from '../ultils/icons';
 import { useDispatch } from 'react-redux';
+import path from '../ultils/path';
+import { Link } from 'react-router-dom';
 const Bestsaller = () => {
   const dipatch = useDispatch();
   useEffect(() => {
@@ -125,9 +127,11 @@ const Bestsaller = () => {
                 </div>
                 <div className="flex flex-col w-full p-3 items-start justify-start">
                   <span className="text-main ">
-                    {item.title.length > 50
-                      ? item.title.slice(1, 50) + '...'
-                      : item.title}
+                    <Link to={`/${path.PRODUCT}/${item._id}/${item.slug}`}>
+                      {item.title.length > 50
+                        ? item.title.slice(1, 50) + '...'
+                        : item.title}
+                    </Link>
                   </span>
                   <span>
                     {item.newReview

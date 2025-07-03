@@ -10,7 +10,7 @@ const Slider = () => {
     const reponse = await apis.apiGetCategories();
     setCategories(reponse);
   };
-  console.log(categories);
+  // console.log(categories);
   useEffect(() => {
     fetchCategori();
   }, []);

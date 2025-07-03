@@ -13,7 +13,7 @@ const Blogs = () => {
     dipatch(getBlogs());
   }, []);
   const blogCategories = useSelector((state) => state.blog);
-  console.log(blogCategories);
+  // console.log(blogCategories);
 
   const [sliderRef, slider] = useKeenSlider({
     loop: true,
@@ -52,7 +52,10 @@ const Blogs = () => {
             className="keen-slider w-full  py-3"
           >
             {blogCategories?.blogs?.map((item) => (
-              <div className="keen-slider__slide w-full flex flex-row items-center justify-center ">
+              <div
+                className="keen-slider__slide w-full flex flex-row items-center justify-center "
+                key={item._id}
+              >
                 {' '}
                 <div className=" w-[350px] h-[500px]" key={item?._id}>
                   <div className="">
@@ -69,20 +72,20 @@ const Blogs = () => {
                         : item?.title}
                     </span>
                     <span className="flex text-[13px] py-2 h-full tracking-wider  text-main ">
-                      <p className=" pr-5 flex h-full gap-2">
+                      <div className=" pr-5 flex h-full gap-2">
                         <div className="pt-1">
                           <MdOutlineDateRange style={{ fontSize: '19px' }} />
                         </div>
                         <div className="pt-1">
                           {formatDate(item?.createdAt)}
                         </div>
-                      </p>
-                      <p className="flex items-center h-full gap-2">
+                      </div>
+                      <div className="flex items-center h-full gap-2">
                         <div>
                           <FcLike style={{ fontSize: '19px' }} />
                         </div>
                         <div className="pt-1">0 Comment</div>
-                      </p>
+                      </div>
                     </span>
                     <span className="text-[13px] tracking-wider  text-main ">
                       {item?.description?.length >= 150

@@ -8,11 +8,11 @@ const HeaderTop = () => {
     <>
       {' '}
       <div className="flex w-main items-center justify-between">
-        <div className="cursor-pointer text-[12px] hover:text-white">
+        <div className="cursor-pointer text-[12px] hover:text-white outline-none">
           ORDER ONLINE OR CALL US (+1800) 000 8808
         </div>
         <div className="flex justify-center items-center gap-2 text-[12px] ">
-          <span className="cursor-pointer  hover:text-white">
+          <span className="cursor-pointer  hover:text-white outline-none">
             <Link to={path.LOGIN}> Sign In or Create Account</Link>
           </span>
           <span className="hover:text-white cursor-pointer ">

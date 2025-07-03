@@ -7,6 +7,9 @@ export default {
       width: {
         main: '1180px',
       },
+      borderColor: {
+        main: '#505050',
+      },
       colors: {
         main: '#505050',
         colorHover: '#FCF8EE',

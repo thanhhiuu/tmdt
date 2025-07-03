@@ -12,3 +12,5 @@ export { default as CustomProduct } from './CustomProduct';
 export { default as NewArrivals } from './NewArrivals';
 export { default as Hotcollections } from './Hotcollections';
 export { default as Blogs } from './Blogs';
+export { default as InputForm } from './InputForm';
+export { default as Button } from './Button';

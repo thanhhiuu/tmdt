@@ -14,12 +14,14 @@ import {
   updateByAdmin,
   addAddress,
   addCart,
+  kycGmail,
 } from '../controllers/user.js';
 import { verifyToken, isAdmin } from '../middlewares/verifyToken.js';
 const router = expressRouter.Router();
 
 router.post('/register', register);
 router.post('/login', login);
+router.get('/verify-email/:token', kycGmail);
 router.get('/getone', [verifyToken, isAdmin], getOneUser);
 router.get('/getall', [verifyToken, isAdmin], getAllUser);
 router.put('/address', [verifyToken], addAddress);

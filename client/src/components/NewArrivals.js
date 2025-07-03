@@ -21,9 +21,7 @@ const NewArrivals = () => {
     if (reponse[1]?.message) setNewarrivals(reponse[1]?.data);
   };
   useEffect(() => {
-    setTimeout(() => {
-      fetchProduct();
-    }, 1000);
+    fetchProduct();
   }, [active]);
   return (
     <>

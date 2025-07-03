@@ -1,5 +1,6 @@
 import User from '../models/user.js';
 import cookie from 'cookie';
+import crypto from 'crypto';
 import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
@@ -9,21 +10,73 @@ const register = asyncHandler(async (req, res) => {
   if (!firstname || !lastname || !email || !password) {
     return res.status(400).json({
       message: false,
-      error: 'Not create user',
+      error: 'Vui lòng nhập đẩy đủ thông tin !',
     });
   }
-  const emailCheck = await User.findOne({ email });
-  if (emailCheck) {
+  const user = await User.findOne({ email });
+  console.log('user', user);
+  if (user) {
     return res.status(400).json({
       message: false,
       error: 'User already exists',
     });
   } else {
-    const createdUser = await User.create(req.body);
-
+    const token = await crypto.randomBytes(32).toString('hex');
+    res.cookie(
+      'kycgmail',
+      { ...req.body, token },
+      { httpOnly: true, maxAge: 15 * 60 * 1000 }
+    );
+    const transport = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+    const result = await transport.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Reset Password',
+      html: `<h1>Vui lòng đổi mật khẩu ! Thời hạn đổi của bạn là 10 phút. ${process.env.URL_RESET}/verify-email/${token}</h1>`,
+    });
     return res.status(200).json({
       message: true,
-      data: createdUser,
+      data: 'Reset password successfully',
+      result,
+    });
+  }
+});
+const kycGmail = asyncHandler(async (req, res) => {
+  const tokens = await req?.cookies?.kycgmail?.token;
+  console.log('req.cookies.kycgmail', req?.cookies.kycgmail.token);
+  const { token } = req.params;
+  console.log(token);
+  if (!tokens && !token) {
+    return res.status(400).json({
+      success: false,
+      message: 'Token Not Exits',
+    });
+  }
+  if (tokens === token) {
+    const reponse = await User.create({
+      firstname: req?.cookies?.kycgmail?.firstname,
+      lastname: req?.cookies?.kycgmail?.lastname,
+      mobile: req?.cookies?.kycgmail?.mobile,
+      password: req?.cookies?.kycgmail?.password,
+      email: req?.cookies?.kycgmail?.email,
+      isVerified: true,
+    });
+    if (!reponse) {
+      return res.status(400).json({
+        success: false,
+        message: 'Token Not Exits',
+      });
+    }
+    return res.status(400).json({
+      success: true,
+      message: 'Đăng Ký Thành Côngg',
+      data: reponse,
     });
   }
 });
@@ -391,4 +444,5 @@ export {
   updateByAdmin,
   addAddress,
   addCart,
+  kycGmail,
 };
