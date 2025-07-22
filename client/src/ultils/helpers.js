@@ -1,6 +1,7 @@
 export const formatNumber = (number) =>
   Number(number.toFixed(1)).toLocaleString();
 
+export const formatVND = (number) => Math.round(number / 1000) * 1000;
 export const startRating = (rating, maxRating = 5) => {
   const star = [];
   for (let i = 1; i <= maxRating; i++) {

@@ -14,3 +14,5 @@ export { default as Hotcollections } from './Hotcollections';
 export { default as Blogs } from './Blogs';
 export { default as InputForm } from './InputForm';
 export { default as Button } from './Button';
+export { default as Breadcrumd } from './Breadcrumd';
+export { default as SelectionQuantity } from './SelectionQuantity';

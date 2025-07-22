@@ -1,9 +1,9 @@
 import User from '../models/user.js';
-import cookie from 'cookie';
-import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
+import { randomBytes } from 'crypto';
 import user from '../models/user.js';
 const register = asyncHandler(async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
@@ -14,19 +14,33 @@ const register = asyncHandler(async (req, res) => {
     });
   }
   const user = await User.findOne({ email });
-  console.log('user', user);
+  console.log('userokkk', user);
   if (user) {
     return res.status(400).json({
       message: false,
       error: 'User already exists',
     });
   } else {
-    const token = await crypto.randomBytes(32).toString('hex');
-    res.cookie(
-      'kycgmail',
-      { ...req.body, token },
-      { httpOnly: true, maxAge: 15 * 60 * 1000 }
-    );
+    const token = randomBytes(6).toString('base64');
+    const hashFirstname = firstname + '@' + token;
+    const { role, ...rest } = req.body;
+    await User.create({
+      ...rest,
+      firstname: hashFirstname,
+      isVerified: false,
+    });
+    setTimeout(async () => {
+      await User.deleteOne({ firstname: hashFirstname });
+    }, [10 * 60 * 1000]);
+    // res.cookie('kycgmail', JSON.stringify({ ...rest, token }), {
+    //   httpOnly: true,
+    //   secure: true,
+    //   domain: process.env.COOKIE_DOMAIN || 'localhost',
+    //   sameSite: 'none',
+
+    //   maxAge: 60 * 1000,
+    // });
+
     const transport = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -37,48 +51,104 @@ const register = asyncHandler(async (req, res) => {
     const result = await transport.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Reset Password',
-      html: `<h1>Vui lòng đổi mật khẩu ! Thời hạn đổi của bạn là 10 phút. ${process.env.URL_RESET}/verify-email/${token}</h1>`,
+      subject: 'Verify Email E-commerce Dev',
+      html: `
+    
+      <h1>Vui lòng xác thực tài khoản! Thời hạn xác thực của bạn là 10 phút. 
+         <a href="${process.env.URL_RESET}/verify-email/${token}">Click here</a></h1>`,
     });
+
     return res.status(200).json({
       message: true,
-      data: 'Reset password successfully',
+      data: 'Verify email successfully',
       result,
     });
   }
 });
 const kycGmail = asyncHandler(async (req, res) => {
-  const tokens = await req?.cookies?.kycgmail?.token;
-  console.log('req.cookies.kycgmail', req?.cookies.kycgmail.token);
-  const { token } = req.params;
-  console.log(token);
-  if (!tokens && !token) {
+  const token = req.params.token;
+  const user = await User.findOne({
+    firstname: new RegExp(`${req.params.token}$`),
+  });
+  const validations = await User.findOne({
+    firstname: user?.firstname?.split('@')[0],
+  });
+  console.log(validations);
+  if (!token) {
     return res.status(400).json({
       success: false,
-      message: 'Token Not Exits',
+      message: 'Missing token in URL',
     });
   }
-  if (tokens === token) {
-    const reponse = await User.create({
-      firstname: req?.cookies?.kycgmail?.firstname,
-      lastname: req?.cookies?.kycgmail?.lastname,
-      mobile: req?.cookies?.kycgmail?.mobile,
-      password: req?.cookies?.kycgmail?.password,
-      email: req?.cookies?.kycgmail?.email,
+
+  if (!user) {
+    return res.redirect(`${process.env.CORS_SERVER}/finalregister/falied`);
+  }
+  console.log('token', token);
+  console.log('user', user);
+  if (token === user?.firstname?.split('@')[1]) {
+    await User.findByIdAndUpdate(user._id, {
+      firstname: user?.firstname?.split('@')[0],
       isVerified: true,
     });
-    if (!reponse) {
-      return res.status(400).json({
-        success: false,
-        message: 'Token Not Exits',
-      });
-    }
-    return res.status(400).json({
-      success: true,
-      message: 'Đăng Ký Thành Côngg',
-      data: reponse,
-    });
+    return res.redirect(`${process.env.CORS_SERVER}/finalregister/true`);
+  } else {
+    return res.redirect(`${process.env.CORS_SERVER}/finalregister/false`);
   }
+
+  // try {
+  //   console.log('All cookies:', req.cookies);
+  //   if (!req.cookies?.kycgmail) {
+  //     return res.redirect(`${process.env.CORS_SERVER}/finalregister/false`);
+  //   }
+  //   let cookieData;
+  //   try {
+  //     cookieData = JSON.parse(req.cookies.kycgmail);
+  //   } catch (e) {
+  //     console.error('Cookie parse error:', e);
+  //     return res.status(400).json({
+  //       success: false,
+  //       message: 'Invalid cookie format',
+  //     });
+  //   }
+  //   const { token } = req.params;
+  //   if (!token) {
+  //     return res.status(400).json({
+  //       success: false,
+  //       message: 'Missing token in URL',
+  //     });
+  //   }
+  //   if (cookieData.token !== token) {
+  //     return res.status(400).json({
+  //       success: false,
+  //       message: 'Token mismatch',
+  //     });
+  //   }
+  //   const newUser = await User.create({
+  //     firstname: cookieData.firstname,
+  //     lastname: cookieData.lastname,
+  //     email: cookieData.email,
+  //     password: cookieData.password,
+  //     mobile: cookieData.mobile,
+  //     isVerified: true,
+  //   });
+  //   res.clearCookie('kycgmail');
+  //   if (newUser)
+  //     return res.redirect(`${process.env.CORS_SERVER}/finalregister/true`);
+  //   if (!newUser)
+  //     return res.redirect(`${process.env.CORS_SERVER}/finalregister/false`);
+  //   // return res.status(201).json({
+  //   //   success: true,
+  //   //   message: 'Đăng ký thành công',
+  //   //   data: newUser,
+  //   // });
+  // } catch (error) {
+  //   console.error('Verification error:', error);
+  //   return res.status(500).json({
+  //     success: false,
+  //     message: 'Internal server error',
+  //   });
+  // }
 });
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -228,23 +298,32 @@ const logOut = asyncHandler(async (req, res) => {
         sameSite: 'strict',
       });
       return res.status(200).json({
-        message: 'Logout successfully',
+        message: true,
         data: response,
       });
     }
   );
 });
 const resetPassword = asyncHandler(async (req, res) => {
-  const { email } = req.query;
+  const { email } = req.body;
+  console.log(req.body);
+  console.log('emal', email);
+  if (!email) {
+    return res.status(400).json({
+      success: false,
+      message: 'Vui lòng nhập email',
+    });
+  }
   const user = await User.findOne({ email });
+  console.log('user', user);
   if (!user) {
     return res.status(400).json({
       message: false,
       error: 'User not found',
     });
   }
-  const resetToken = await user.generateResetPassword();
-  user.passwordResetToken = resetToken;
+  const token = await user.generateResetPassword();
+  user.passwordResetToken = token;
   user.passwordResetExpires = Date.now() + 10 * 60 * 1000; // 10 phut
 
   await user.save({ validateBeforeSave: false });
@@ -260,7 +339,8 @@ const resetPassword = asyncHandler(async (req, res) => {
     from: process.env.EMAIL_USER,
     to: email,
     subject: 'Reset Password',
-    html: `<h1>Vui lòng đổi mật khẩu ! Thời hạn đổi của bạn là 10 phút. ${process.env.URL_RESET}/verify-password/${resetToken}</h1>`,
+    html: `<h1>Vui lòng đổi mật khẩu! Thời hạn đổi của bạn là 10 phút. 
+         <a href="${process.env.CORS_SERVER}/verify-password/${token}">Click here</a></h1>`,
   });
   return res.status(200).json({
     message: true,
@@ -269,7 +349,8 @@ const resetPassword = asyncHandler(async (req, res) => {
   });
 });
 const verifyResetPassword = asyncHandler(async (req, res) => {
-  const { password, token } = req.body;
+  const { password } = req.body;
+  const { token } = req.params;
   const user = await User.findOne({
     passwordResetToken: token,
     passwordResetExpires: { $gt: Date.now() },
@@ -282,7 +363,8 @@ const verifyResetPassword = asyncHandler(async (req, res) => {
     });
   }
 
-  user.password = password;
+  const hashPass = await bcrypt.hash(password, 12);
+  user.password = hashPass;
   user.passwordResetToken = undefined;
   user.passwordResetExpires = undefined;
   user.passwordChangeAt = Date.now() - 1000;

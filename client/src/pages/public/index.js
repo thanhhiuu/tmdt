@@ -9,3 +9,4 @@ export { default as Faq } from './Faq';
 export { default as HeaderTop } from './HeaderTop';
 export { default as Foodter } from './Foodter';
 export { default as FinalRegister } from './FinalRegister';
+export { default as KycPassword } from './KycPassword';

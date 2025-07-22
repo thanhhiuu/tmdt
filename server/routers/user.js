@@ -22,13 +22,14 @@ const router = expressRouter.Router();
 router.post('/register', register);
 router.post('/login', login);
 router.get('/verify-email/:token', kycGmail);
+
 router.get('/getone', [verifyToken, isAdmin], getOneUser);
 router.get('/getall', [verifyToken, isAdmin], getAllUser);
 router.put('/address', [verifyToken], addAddress);
 router.put('/addcart', [verifyToken], addCart);
 router.post('/refreshtoken', refreshToken);
 router.post('/logout', logOut);
-router.get('/reset-password', resetPassword);
+router.post('/reset-password', resetPassword);
 router.put('/verify-password', verifyResetPassword);
 router.delete('/delete-current', [verifyToken, isAdmin], deleteUser);
 router.put('/update-current', [verifyToken], updateCurrentUser);

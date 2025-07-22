@@ -5,8 +5,11 @@ import {
   FaGoogle,
   FaLinkedinIn,
   FaInstagram,
+  FaShieldAlt,
+  FaGift,
+  FaTty,
 } from 'react-icons/fa';
-import { CiMail, CiHeart, CiTwitter } from 'react-icons/ci';
+import { CiMail, CiHeart, CiTwitter, CiDeliveryTruck } from 'react-icons/ci';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { FcLike } from 'react-icons/fc';
 import { PiUserCheckLight } from 'react-icons/pi';
@@ -18,6 +21,7 @@ import {
   MdOutlineStar,
   MdOutlineStarBorder,
   MdOutlineDateRange,
+  MdOutlineReply,
 } from 'react-icons/md';
 import { IoIosEye, IoMdMenu } from 'react-icons/io';
 const icons = {
@@ -42,6 +46,11 @@ const icons = {
   FaLinkedinIn,
   FaTelegramPlane,
   FaInstagram,
+  FaShieldAlt,
+  CiDeliveryTruck,
+  FaGift,
+  MdOutlineReply,
+  FaTty,
 };
 
 export default icons;

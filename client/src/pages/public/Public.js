@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { Header } from '../../components';
+import { Header, Menu } from '../../components';
 import HeaderTop from './HeaderTop';
 import Foodter from './Foodter';
 
@@ -14,7 +14,9 @@ const Public = () => {
         <div className="py-[35px] border-b">
           <Header />
         </div>
-
+        <div className="w-full">
+          <Menu />
+        </div>
         <div>
           <Outlet />
         </div>

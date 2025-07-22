@@ -6,9 +6,10 @@ const path = {
   BLOG: 'blog',
   SERVICES: 'services',
   FAQS: 'faqs',
-  PRODUCT__PID__TITLE: 'product/:uid/:title',
+  PRODUCT__PID__TITLE: ':product/:uid/:title',
   PRODUCT: 'product',
-  FINALREGISTER: 'finalregister',
+  FINALREGISTER: 'finalregister/:title',
+  KYCPASSWORD: 'verify-password/:token',
 };
 
 export default path;

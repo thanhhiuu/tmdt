@@ -1,12 +1,12 @@
 import React from 'react';
-
+import banner from '../assets/banner.jpg';
 const Banner = () => {
   return (
     <>
       <div className="w-full h-full">
         <img
-          className="object-contain"
-          src="https://digital-world-2.myshopify.com/cdn/shop/files/promo-21_94c561f6-4c50-4a5f-8868-0c7b804bc550_1920x.png?v=1750840379"
+          className="object-contain h-[500px] w-full"
+          src={banner}
           alt="Loading"
         />
       </div>

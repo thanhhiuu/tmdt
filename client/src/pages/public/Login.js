@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { login } from '../../app/user/userSlice';
 import Toastify from 'toastify-js';
 import 'toastify-js/src/toastify.css';
+
 const Login = () => {
   const [payload, setPayload] = useState({
     lastname: '',
@@ -17,13 +18,45 @@ const Login = () => {
     password: '',
     mobile: '',
   });
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [isShow, setIsShow] = useState(false);
+  const [onOff, setOnOff] = useState(true);
+  const [valueEmail, setValueEmail] = useState('');
+  const [isShowReset, setIsShowReset] = useState(true);
+  const [errors, setErrors] = useState({});
+  const validation = async () => {
+    const newError = {};
+    if (isShow) {
+      if (!payload.lastname.trim())
+        newError.lastname = 'Vui lòng đừng bỏ trống !';
+      if (!payload.firstname.trim())
+        newError.firstname = 'Vui lòng đừng bỏ trống !';
+      if (!payload.email.trim()) newError.email = 'Vui lòng đừng bỏ trống !';
+      if (!payload.mobile.trim()) newError.mobile = 'Vui lòng đừng bỏ trống !';
+      if (!payload.password.trim())
+        newError.password = 'Vui lòng đừng bỏ trống !';
+    }
+    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(payload.email))
+      newError.email = 'Email không đúng định dạng !';
+    // if (!/^\d{10,11}$/.test(payload.mobile))
+    //   newError.mobile = 'Số điện thoại phải gồm 10 số !';
+    if (payload.password.length < 6)
+      newError.password = 'Password phải lớn 6 chữ số !';
+
+    return newError;
+  };
   const handlerSubmit = useCallback(async () => {
     try {
       if (isShow) {
+        const formError = await validation();
+        if (Object.keys(formError).length > 0) {
+          setErrors(formError);
+          return;
+        }
+        setErrors({});
         // Xử lý đăng ký
         const reponse = await apis.apiRegister(payload);
         console.log('ok', reponse);
@@ -34,11 +67,11 @@ const Login = () => {
             gravity: 'top',
             position: 'right',
             style: {
-              background: 'linear-gradient(135deg, #4CAF50, #2E7D32)',
+              background: 'linear-gradient(135deg, #FF5722, #E64A19)',
               fontWeight: 'bold',
             },
           }).showToast();
-          navigate(`/${path.LOGIN}`);
+
           setIsShow(true);
         } else {
           Toastify({
@@ -56,8 +89,27 @@ const Login = () => {
         }
       } else {
         // Xử lý đăng nhập
+        const formError = await validation();
+        if (Object.keys(formError).length > 0) {
+          setErrors(formError);
+          return;
+        }
+        setErrors({});
         const rs = await apis.apiLogin(payload);
-        console.log(rs);
+
+        // console.log('rs', rs);
+        // if (rs.message === false) {
+        //   Toastify({
+        //     text: `🎉 Bạn đang ở chế độ xem ! Nếu mua hàng vui lòng đăng nhập.`,
+        //     duration: 3000,
+        //     gravity: 'top',
+        //     position: 'right',
+        //     style: {
+        //       background: 'linear-gradient(135deg, #FF5722, #E64A19)',
+        //       fontWeight: 'bold',
+        //     },
+        //   }).showToast();
+        // }
         dispatch(
           login({
             userData: rs.userData,
@@ -72,15 +124,14 @@ const Login = () => {
             gravity: 'top',
             position: 'right',
             style: {
-              background: 'linear-gradient(135deg, #4CAF50, #2E7D32)',
+              background: 'linear-gradient(135deg, #FF5722, #E64A19)',
               fontWeight: 'bold',
             },
           }).showToast();
-          navigate(`/${path.LOGIN}`);
           setIsShow(false);
         } else {
           Toastify({
-            text: '🎉 Hãy kiểm tra email chúng tôi đã gửi link xác thực tài khoản của bạn !.',
+            text: '🎉 Đăng nhập thành công !.',
             duration: 3000,
             gravity: 'top',
             position: 'right',
@@ -89,8 +140,7 @@ const Login = () => {
               fontWeight: 'bold',
             },
           }).showToast();
-
-          setIsShow(false);
+          navigate(`/${path.HOME}`);
         }
       }
     } catch (error) {
@@ -107,10 +157,92 @@ const Login = () => {
         },
       }).showToast();
     }
-  }, [payload, isShow, dispatch, navigate]);
+  }, [payload, isShow, dispatch, navigate, onOff]);
+  const handlerReset = useCallback(async () => {
+    if (!isShowReset) {
+      const reponse = await apis.apiKycEmailPassword(valueEmail);
+      console.log('KYC', reponse);
+      console.log(valueEmail);
+      if (reponse.message === true) {
+        Toastify({
+          text: '🎉 Hãy kiểm tra email, chúng tôi đã gửi link để đổi mật khẩu của bạn của bạn !.',
+          duration: 3000,
+          gravity: 'top',
+          position: 'right',
+          style: {
+            background: 'linear-gradient(135deg, #4CAF50, #2E7D32)',
+            fontWeight: 'bold',
+          },
+        }).showToast();
+      } else {
+        Toastify({
+          text: '🎉 Email sai hoặc không tồn tại!.',
+          duration: 3000,
+          gravity: 'top',
+          position: 'right',
+          style: {
+            background: 'linear-gradient(135deg, #4CAF50, #2E7D32)',
+            fontWeight: 'bold',
+          },
+        }).showToast();
+      }
+      console.log(reponse);
+    }
+  }, [isShowReset, valueEmail, onOff]);
   return (
     <>
       <div className="w-full h-screen relative">
+        {isShowReset === false ? (
+          <div
+            className={`${
+              onOff ? 'absolute' : 'hidden'
+            } top-0 left-0 right-0 bottom-0 bg-opacity-50 flex items-center justify-center z-50 bg-opatitys`}
+          >
+            <div className="p-6 card flex flex-col items-center justify-center gap-6 w-full max-w-md bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+              <h3 className="text-center text-xl font-semibold text-gray-800">
+                VUI LÒNG NHẬP EMAIL ĐỂ ĐỔI MẬT KHẨU
+              </h3>
+
+              <div className="w-full">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={valueEmail}
+                  onChange={(e) => {
+                    console.log('Input value:', e.target.value);
+                    setValueEmail(e.target.value);
+                  }}
+                  placeholder="Nhập địa chỉ email của bạn"
+                />
+              </div>
+
+              <Button
+                name={'Gửi'}
+                handlerOnClick={handlerReset}
+                className="w-full py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              />
+
+              <button
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors cursor-pointer"
+                onClick={() => {
+                  setOnOff(true);
+                  setIsShowReset(true);
+                }}
+              >
+                Quay lại
+              </button>
+            </div>
+          </div>
+        ) : (
+          ''
+        )}
         <img
           src={loginimg}
           alt="BackGround"
@@ -130,6 +262,7 @@ const Login = () => {
                 nameKey={'lastname'}
                 value={payload.lastname}
                 setValue={setPayload}
+                error={errors.lastname}
               />
             )}
             {isShow && (
@@ -137,6 +270,7 @@ const Login = () => {
                 nameKey={'firstname'}
                 value={payload.firstname}
                 setValue={setPayload}
+                error={errors.firstname}
               />
             )}
             <span className="w-full flex flex-col justify-center items-center">
@@ -145,12 +279,14 @@ const Login = () => {
                 nameKey={'email'}
                 value={payload.email}
                 setValue={setPayload}
+                error={errors.email}
               />
               {isShow && (
                 <InputForm
                   nameKey={'mobile'}
                   value={payload.mobile}
                   setValue={setPayload}
+                  error={errors.mobile}
                 />
               )}
               <InputForm
@@ -158,6 +294,7 @@ const Login = () => {
                 value={payload.password}
                 type={'password'}
                 setValue={setPayload}
+                error={errors.password}
               />
             </span>
           </span>
@@ -169,7 +306,13 @@ const Login = () => {
           </span>
           <span className="w-full flex items-center justify-between py-3">
             {!isShow && (
-              <p className="text-[13px] hover:underline cursor-pointer">
+              <p
+                className="text-[13px] hover:underline cursor-pointer"
+                onClick={() => {
+                  setOnOff(true);
+                  setIsShowReset(false);
+                }}
+              >
                 Forgot your password?
               </p>
             )}

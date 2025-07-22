@@ -7,7 +7,13 @@ const instance = axios.create({
 // Add a request interceptor
 instance.interceptors.request.use(
   function (config) {
-    // Do something before request is sent
+    let localStorageData = window.localStorage.getItem('persist:root');
+    if (localStorageData && typeof localStorageData === 'string') {
+      localStorageData = JSON.parse(localStorageData);
+      const accessToken = JSON.parse(localStorageData?.token);
+      config.headers = { Authorization: `Bearer ${accessToken}` };
+      return config;
+    }
     return config;
   },
   function (error) {

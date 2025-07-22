@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const InputForm = ({ type, nameKey, value, setValue, wf }) => {
+const InputForm = ({ type, nameKey, value, setValue, wf, error }) => {
   const [focus, setFocus] = useState(false);
   return (
     <>
@@ -21,6 +21,13 @@ const InputForm = ({ type, nameKey, value, setValue, wf }) => {
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
         />
+        <div>
+          {error && (
+            <span className="absolute text-[10px] bottom-6 text-red-500 right-0 px-1 italic">
+              {error}
+            </span>
+          )}
+        </div>
       </div>
     </>
   );

@@ -91,7 +91,7 @@ const Dailydeal = () => {
           </div>
           <div className="w-full h-[300px] flex justify-center">
             <img
-              src={elm.image}
+              src={elm?.image[0]}
               alt="Hết"
               className="w-[250px] h-[300px] object-cover"
             />

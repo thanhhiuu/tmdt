@@ -114,7 +114,7 @@ const CustomProduct = ({ bestsallers, newarrivals, content, heightImg }) => {
                         ''
                       )}
                       <img
-                        src={item.image}
+                        src={item.image[0]}
                         alt="Not Found"
                         className={`object-cover h-[${heightImg}] w-full p-3 `}
                       />

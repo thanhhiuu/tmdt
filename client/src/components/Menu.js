@@ -1,12 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import contant from '../ultils/contants';
+import { menu } from '../ultils/contants';
 const Menu = () => {
   return (
     <>
       <div className=" w-main  h-[50px] flex items-center  justify-between px-[10px] border-b">
         <div className="menu   ">
-          {contant.map((elm) => {
+          {menu.map((elm) => {
             return (
               <NavLink
                 className={({ isActive }) =>

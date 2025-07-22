@@ -14,14 +14,11 @@ import {
 const Home = () => {
   return (
     <>
-      <div className="w-full">
-        <Menu />
-      </div>
       <div className="banner-slider w-full flex justify-center gap-4 py-5">
         <div className="slider w-[30%] border">
           <Slider />
         </div>
-        <div className="banner w-[70%] bg-gray-400">
+        <div className="banner w-[70%] border">
           <Banner />
         </div>
       </div>

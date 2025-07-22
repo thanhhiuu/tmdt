@@ -115,7 +115,7 @@ const Bestsaller = () => {
                     ''
                   )}
                   <img
-                    src={item.image}
+                    src={item?.image[0]}
                     alt="Not Found"
                     className="object-cover h-[230px] w-full p-3 "
                   />

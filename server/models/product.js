@@ -14,10 +14,10 @@ var product = new mongoose.Schema(
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Category',
+      ref: 'ProductCategory',
     },
     description: {
-      type: String,
+      type: Array,
     },
     price: {
       type: Number,

@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-// eslint-disable-next-line
 import { Routes, Route } from 'react-router-dom';
 import path from './ultils/path';
 import {
@@ -11,15 +9,19 @@ import {
   Services,
   Faq,
   FinalRegister,
+  KycPassword,
 } from './pages/public';
 import { getCategories } from './app/apps/appAction';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+
 function App() {
-  const dipatch = useDispatch();
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    dipatch(getCategories());
-  }, []);
+    dispatch(getCategories());
+  }, [dispatch]);
+
   return (
     <div className="App font-Poppins">
       <Routes>
@@ -33,6 +35,7 @@ function App() {
         </Route>
         <Route path={path.LOGIN} element={<Login />} />
         <Route path={path.FINALREGISTER} element={<FinalRegister />} />
+        <Route path={path.KYCPASSWORD} element={<KycPassword />} />
       </Routes>
     </div>
   );
