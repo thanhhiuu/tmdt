@@ -1,14 +1,13 @@
 import { Link } from 'react-router-dom';
 import useBreadcrumbs from 'use-react-router-breadcrumbs';
-const Breadcrumd = ({ productData, title }) => {
+const Breadcrumd = ({ productData, title, cust }) => {
   const routers = [
     { path: `/:product`, breadcrumb: productData?.title },
     { path: `/`, breadcrumb: 'Home' },
     { path: `/:product/:uid/:title`, breadcrumb: title },
   ];
   const breadcrumbs = useBreadcrumbs(routers);
-
-  console.log('Lo', breadcrumbs);
+  // console.log(breadcrumbs);
   return (
     <>
       {' '}
@@ -17,7 +16,9 @@ const Breadcrumd = ({ productData, title }) => {
         <div className="font-semibold">{title}</div>
         <div className="flex items-center gap-2">
           {breadcrumbs
-            .filter((el) => !el.match.route === false)
+            .filter((el, index) =>
+              cust ? index !== 1 && index !== 2 : !el.match.route === false
+            )
             .map(({ match, breadcrumb }, index, arr) => (
               <Link
                 className="flex items-center gap-2 uppercase hover:text-colorNav"

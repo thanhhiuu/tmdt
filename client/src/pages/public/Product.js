@@ -3,22 +3,36 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import * as apis from '../../apis';
 import { useKeenSlider } from 'keen-slider/react';
+import newz from '../../assets/new.png';
 import 'keen-slider/keen-slider.min.css';
 import { ChevronLeft, ChevronRight } from 'lucide-react'; // <-- ICON
 import Button from '../../components/Button';
 import Breadcrumd from '../../components/Breadcrumd';
-import { formatNumber, formatVND } from '../../ultils/helpers';
+import { formatNumber, formatVND, startRating } from '../../ultils/helpers';
 import SelectionQuantity from '../../components/SelectionQuantity';
-import { information } from '../../ultils/contants';
+import { info, information } from '../../ultils/contants';
 const Product = () => {
   const { uid, title } = useParams();
   const [productCurrent, setProductCurrent] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [products, setProducts] = useState(null);
+  const [actived, setActived] = useState(1);
+
   const fetchData = async () => {
     const reponse = await apis.apiOneProduct(uid);
     setProductCurrent(reponse.data);
   };
-  console.log(quantity);
+  const fetchProducts = async () => {
+    try {
+      const response = await apis.apiAllProduct();
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  // console.log('oooo', products);
+  // console.log(quantity);
   const handlerBack = useCallback(() => {
     if (!Number(quantity)) {
       setQuantity('');
@@ -34,6 +48,7 @@ const Product = () => {
 
   useEffect(() => {
     fetchData();
+    fetchProducts();
   }, [uid, title]);
   const [sliderRef, slider] = useKeenSlider({
     loop: true,
@@ -44,7 +59,6 @@ const Product = () => {
     slides: {
       perView: 3,
       spacing: 15,
-      origin: 'center',
     },
     breakpoints: {
       '(max-width: 1024px)': {
@@ -56,7 +70,6 @@ const Product = () => {
     },
   });
 
-  console.log('productCurrent', productCurrent);
   return (
     <>
       <div className="h-[90px] flex items-center text-[18px] border-b">
@@ -154,6 +167,87 @@ const Product = () => {
           </div>
         </div>
       </div>
+      <div>
+        <div className="flex item-center w-full gap-3">
+          {info?.map((elm) => (
+            <span
+              className={` py-2 px-10 uppercase cursor-pointer relative ${
+                actived === +elm.id
+                  ? 'bg-slate-400/0 border border-b-0'
+                  : 'bg-slate-400/15'
+              }`}
+              onClick={() => setActived(elm?.id)}
+              key={elm?.id}
+            >
+              {elm?.title}
+            </span>
+          ))}
+        </div>
+        <div className="h-[330px] border p-3 text-[14px] italic">
+          {info?.some((elm) => elm.id === actived) &&
+            info.find((elm) => elm.id === actived).content}
+        </div>
+      </div>
+      <div className="mt-4">
+        <div className="relative group w-full">
+          <div
+            key={products?.length}
+            ref={sliderRef}
+            className="keen-slider w-full flex items-center ml-1"
+          >
+            {products?.slice(0, 3).map((item) => (
+              <div
+                key={item._id}
+                className="keen-slider__slide h-[350px] flex flex-col items-center justify-start rounded-lg border"
+              >
+                <div className="w-full relative  ">
+                  <img
+                    src={item.image}
+                    alt="Not Found"
+                    className="object-cover h-[230px] w-full p-3"
+                  />
+                  <img
+                    src={newz}
+                    alt="Hết"
+                    className="w-[70px] absolute top-0 right-[-10px]"
+                  />
+                </div>
+                <div className="flex flex-col w-full p-3 items-start justify-start">
+                  <span className="text-main">
+                    {item.title.length > 50
+                      ? item.title.slice(1, 50) + '...'
+                      : item.title}
+                  </span>
+                  <span>
+                    {item.newReview
+                      ? startRating(item?.newReview)
+                      : startRating(5)}
+                  </span>
+                  <span className="text-main">
+                    {formatNumber(item.price)}
+                    <strong> VNĐ</strong>
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Prev Button */}
+          <button
+            onClick={() => slider?.current?.prev()}
+            className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white shadow-md rounded-full p-2 text-gray-700 hover:bg-gray-100 opacity-0 group-hover:opacity-100 transition"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          {/* Next Button */}
+          <button
+            onClick={() => slider?.current?.next()}
+            className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white shadow-md rounded-full p-2 text-gray-700 hover:bg-gray-100 opacity-0 group-hover:opacity-100 transition"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+      <div className="mb-[500px]"></div>
     </>
   );
 };

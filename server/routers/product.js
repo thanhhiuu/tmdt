@@ -17,7 +17,7 @@ import { handleUpload } from '../middlewares/handlerUpload.js';
 const router = expressRouter.Router();
 
 router.post('/create', [verifyToken, isAdmin], createProduct);
-router.get('/getall', getAllProduct);
+router.get('/getall ', getAllProduct);
 router.get('/get', getProduct);
 router.get('/getcurrent/:uid', getOneProduct); // Thiếu [verifyToken]
 router.put('/update/:uid', [verifyToken], updateProduct);

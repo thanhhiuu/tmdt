@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import icons from '../ultils/icons';
 import * as apis from '../apis';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import path from '../ultils/path';
 const Slider = () => {
   const { GiHamburgerMenu } = icons;
   const [categories, setCategories] = useState([]);
@@ -10,7 +11,7 @@ const Slider = () => {
     const reponse = await apis.apiGetCategories();
     setCategories(reponse);
   };
-  // console.log(categories);
+  console.log('caere', categories);
   useEffect(() => {
     fetchCategori();
   }, []);
@@ -24,17 +25,17 @@ const Slider = () => {
           <p className="text-[16px] text-white">ALL COLLECTIONS</p>
         </div>
 
-        <div className="categories flex flex-col">
+        <div className="categories flex flex-col gap-9 mt-3 px-5">
           {categories?.message?.map((elm) => (
-            <NavLink
-              key={elm._id}
-              to={elm.slug}
+            <Link
+              key={elm?._id}
+              to={`/${path.CATEGORY}/${elm._id}/${elm.title.toLowerCase()}`}
               className={({ isActive }) =>
                 isActive ? 'hover:text-colorNav p-3' : 'p-3 hover:text-colorNav'
               }
             >
-              {elm.title}
-            </NavLink>
+              {elm?.title} ({elm?.brand?.length})
+            </Link>
           ))}
         </div>
       </div>

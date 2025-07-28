@@ -10,6 +10,7 @@ import {
   Faq,
   FinalRegister,
   KycPassword,
+  Categorys,
 } from './pages/public';
 import { getCategories } from './app/apps/appAction';
 import { useEffect } from 'react';
@@ -28,7 +29,9 @@ function App() {
         <Route path={path.PUBLIC} element={<Public />}>
           <Route path={path.HOME} element={<Home />} />
           <Route path={path.PRODUCT__PID__TITLE} element={<Product />} />
-          <Route path={path.PRODUCT} element={<Product />} />
+          <Route path={path.PRODUCT} element={<Product />} />{' '}
+          <Route path={path.CATEGORY__CID__TITLE} element={<Categorys />} />
+          <Route path={path.CATEGORY} element={<Categorys />} />
           <Route path={path.BLOG} element={<Blog />} />
           <Route path={path.SERVICES} element={<Services />} />
           <Route path={path.FAQS} element={<Faq />} />

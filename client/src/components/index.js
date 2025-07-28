@@ -16,3 +16,4 @@ export { default as InputForm } from './InputForm';
 export { default as Button } from './Button';
 export { default as Breadcrumd } from './Breadcrumd';
 export { default as SelectionQuantity } from './SelectionQuantity';
+export { default as CustomSlider } from './CustomSlider';

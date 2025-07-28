@@ -3,6 +3,7 @@ import asyncHandler from 'express-async-handler';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import cloudinary from '../configs/cloundinaryConfigs.js';
 import multer from 'multer';
+import mongoose from 'mongoose';
 const createProduct = asyncHandler(async (req, res) => {
   const { title, price, description } = req.body;
   if (!title || !price || !description || Object.keys(req.body).length === 0) {
@@ -48,7 +49,10 @@ const getOneProduct = asyncHandler(async (req, res) => {
   });
 });
 const getAllProduct = asyncHandler(async (req, res) => {
-  const response = await Product.find().populate('category');
+  const { categoryId } = req.params;
+  const response = await Product.find({ category: categoryId }).populate(
+    'category'
+  );
   if (!response) {
     return res.status(400).json({
       message: false,
@@ -84,6 +88,12 @@ const getProduct = asyncHandler(async (req, res) => {
   if (queryObj?.title) {
     formatFiler.title = { $regex: queryObj.title, $options: 'i' }; // Sử dụng các phương thức của mongoose để tìm kiếm ( $regex) và không phân biệt hoa thường ( $options: "i")
   }
+  if (queryObj?.category) {
+    $match: {
+      category: new RegExp(queryObj.category, 'i');
+    }
+  }
+
   // Tạo biến chung để chạy các hàm
   let resultFilter = Product.find(formatFiler);
 
