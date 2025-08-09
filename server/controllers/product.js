@@ -83,19 +83,29 @@ const getProduct = asyncHandler(async (req, res) => {
   // Tìm kiếm theo biểu thức chuyển đổi ( Giup mongoose đọc hiểu)
   const formatFiler = JSON.parse(queryString); // Chuyển query trở lại lúc đầu (  { price: { '$gt': '5000' } } )
   // console.log('2', formatFiler);
-
+  let colorObjQuery = {};
   // console.log(formatFiler.title);
   if (queryObj?.title) {
     formatFiler.title = { $regex: queryObj.title, $options: 'i' }; // Sử dụng các phương thức của mongoose để tìm kiếm ( $regex) và không phân biệt hoa thường ( $options: "i")
   }
-  if (queryObj?.category) {
-    $match: {
-      category: new RegExp(queryObj.category, 'i');
-    }
+
+  if (queryObj?.color) {
+    delete formatFiler.color;
+    const colorArr = queryObj.color.split(',');
+    const colorQuery = colorArr.map((el) => ({
+      color: { $regex: el, $options: 'i' },
+    }));
+    colorObjQuery = { $or: colorQuery };
   }
+  const q = { ...colorObjQuery, ...formatFiler };
+  // if (queryObj?.category) {
+  //   $match: {
+  //     category: new RegExp(queryObj.category, 'i');
+  //   }
+  // }
 
   // Tạo biến chung để chạy các hàm
-  let resultFilter = Product.find(formatFiler);
+  let resultFilter = Product.find(q);
 
   // Sorting ( Nếu truyền dương thì là tăng còn âm là giảm ( dương: price, âm: -price))
   if (req?.query?.sort) {

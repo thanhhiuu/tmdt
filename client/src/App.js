@@ -15,6 +15,7 @@ import {
 import { getCategories } from './app/apps/appAction';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { BlogPost } from './components';
 
 function App() {
   const dispatch = useDispatch();
@@ -29,10 +30,11 @@ function App() {
         <Route path={path.PUBLIC} element={<Public />}>
           <Route path={path.HOME} element={<Home />} />
           <Route path={path.PRODUCT__PID__TITLE} element={<Product />} />
-          <Route path={path.PRODUCT} element={<Product />} />{' '}
+          <Route path={path.PRODUCT} element={<Categorys />} />{' '}
           <Route path={path.CATEGORY__CID__TITLE} element={<Categorys />} />
           <Route path={path.CATEGORY} element={<Categorys />} />
           <Route path={path.BLOG} element={<Blog />} />
+          <Route path={path.BLOG__TITLE} element={<BlogPost />} />
           <Route path={path.SERVICES} element={<Services />} />
           <Route path={path.FAQS} element={<Faq />} />
         </Route>

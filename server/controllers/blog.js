@@ -19,7 +19,7 @@ const create = asyncHandler(async (req, res) => {
   });
 });
 const getAll = asyncHandler(async (req, res) => {
-  const response = await Blog.find({});
+  const response = await Blog.find({}).select('-author');
   if (!response) {
     return res.status(400).json({
       success: false,
@@ -39,7 +39,7 @@ const getBlog = asyncHandler(async (req, res) => {
       message: 'Not data Blog in Params',
     });
   }
-  const response = await Blog.findById(bid);
+  const response = await Blog.findById(bid).select('-author');
   if (!response) {
     return res.status(400).json({
       success: false,

@@ -16,6 +16,7 @@ import { PiUserCheckLight } from 'react-icons/pi';
 import { SiMinutemailer, SiGooglemaps } from 'react-icons/si';
 import { TiPhone } from 'react-icons/ti';
 import { FiFacebook } from 'react-icons/fi';
+import { FaAngleDown } from 'react-icons/fa';
 
 import {
   MdOutlineStar,
@@ -51,6 +52,7 @@ const icons = {
   FaGift,
   MdOutlineReply,
   FaTty,
+  FaAngleDown,
 };
 
 export default icons;

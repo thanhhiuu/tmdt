@@ -14,7 +14,7 @@ const router = Express.Router();
 
 router.post('/create', [verifyToken, isAdmin], create);
 router.get('/getall', getAll);
-router.get('/current/:bid', [verifyToken, isAdmin], getBlog);
+router.get('/current/:bid', getBlog); // Thiếu  [verifyToken, isAdmin]
 router.put('/update/:bid', [verifyToken, isAdmin], update);
 router.delete('/delete', [verifyToken, isAdmin], deletes);
 router.put('/likes/:bid', [verifyToken, isAdmin], likes);

@@ -29,7 +29,9 @@ const Slider = () => {
           {categories?.message?.map((elm) => (
             <Link
               key={elm?._id}
-              to={`/${path.CATEGORY}/${elm._id}/${elm.title.toLowerCase()}`}
+              to={`/${elm?.title.toLowerCase()}/${
+                elm?._id
+              }/${elm?.title.toLowerCase()}`}
               className={({ isActive }) =>
                 isActive ? 'hover:text-colorNav p-3' : 'p-3 hover:text-colorNav'
               }

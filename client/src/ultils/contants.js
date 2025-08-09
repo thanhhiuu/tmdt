@@ -91,3 +91,11 @@ export const information = [
     icon: <FaTty />,
   },
 ];
+
+export const colors = [
+  { id: '1', name: 'black' },
+  { id: '2', name: 'red' },
+  { id: '3', name: 'white' },
+  { id: '4', name: 'blue' },
+  { id: '5', name: 'yellow' },
+];

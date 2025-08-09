@@ -34,6 +34,7 @@ var blogSchema = new mongoose.Schema(
       type: Boolean,
       default: 'false',
     },
+    comment: { typeof: Array },
     like: [
       {
         type: mongoose.Schema.Types.ObjectId,

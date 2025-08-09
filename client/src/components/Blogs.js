@@ -7,6 +7,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'; // <-- ICON
 import { useKeenSlider } from 'keen-slider/react';
 import { formatDate } from '../ultils/helpers';
 import icons from '../ultils/icons';
+import { Link } from 'react-router-dom';
+import path from '../ultils/path';
 const Blogs = () => {
   const dipatch = useDispatch();
   useEffect(() => {
@@ -67,9 +69,11 @@ const Blogs = () => {
                   </div>
                   <div className="w-[350x] text-justify">
                     <span className="text-[16px] uppercase w-[350x]  text-main font-semibold">
-                      {item?.title?.length >= 35
-                        ? item?.title?.slice(0, 35) + '...'
-                        : item?.title}
+                      <Link to={`/${path.BLOG}/${item?._id}/${item?.title}`}>
+                        {item?.title?.length >= 35
+                          ? item?.title?.slice(0, 35) + '...'
+                          : item?.title}
+                      </Link>
                     </span>
                     <span className="flex text-[13px] py-2 h-full tracking-wider  text-main ">
                       <div className=" pr-5 flex h-full gap-2">

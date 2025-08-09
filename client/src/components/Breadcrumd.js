@@ -7,7 +7,7 @@ const Breadcrumd = ({ productData, title, cust }) => {
     { path: `/:product/:uid/:title`, breadcrumb: title },
   ];
   const breadcrumbs = useBreadcrumbs(routers);
-  // console.log(breadcrumbs);
+  // console.log('br', breadcrumbs);
   return (
     <>
       {' '}
@@ -17,7 +17,7 @@ const Breadcrumd = ({ productData, title, cust }) => {
         <div className="flex items-center gap-2">
           {breadcrumbs
             .filter((el, index) =>
-              cust ? index !== 1 && index !== 2 : !el.match.route === false
+              cust ? index !== 2 && index !== 2 : !el.match.route === false
             )
             .map(({ match, breadcrumb }, index, arr) => (
               <Link
